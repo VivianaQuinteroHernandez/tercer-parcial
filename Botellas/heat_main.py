@@ -1,6 +1,8 @@
 from __future__ import print_function
+from dataclasses import field
 import time
 import argparse
+import csv
 
 from heat import init_fields, write_field, iterate
 from heat_cyt import init_fields_cyt, write_field_cyt, iterate_cyt
@@ -8,57 +10,81 @@ from heat_cyt import init_fields_cyt, write_field_cyt, iterate_cyt
 
 def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1, 
          timesteps=200, image_interval=4000):
-	versions = ['cyt']
+	#versions = ['Python','Cython']
+	input_files = ['bottle.dat', 'bottle_medium.dat', 'bottle_large.dat']
+	#timestepsS = [100, 200, 500, 1000, 2000]
+	versions = ['Python','Cython']
+	timestepsS = [100]
+	# field names 
+	headResults = ['version', 'input_file', 'timesteps', 'time (s)'] 
+	newList = []
 	for version in versions:
-		if version == 'py':      	
-			print("Using pure Python") 	
-			# Initialise the temperature field
-			field, field0 = init_fields(input_file)
+		for input_file in input_files:
+			for timesteps in timestepsS:
+				if version == 'Python':      	
+					#print("Using pure Python") 	
+					# Initialise the temperature field
+					field, field0 = init_fields(input_file)
 
-			print("Heat equation solver")
-			print("Diffusion constant: {}".format(a))
-			print("Input file: {}".format(input_file))
-			print("Parameters")
-			print("----------")
-			print("  nx={} ny={} dx={} dy={}".format(field.shape[0], field.shape[1],
-										dx, dy))
-			print("  time steps={}  image interval={}".format(timesteps,
-													image_interval))
+					#print("Heat equation solver")
+					#print("Diffusion constant: {}".format(a))
+					#print("Input file: {}".format(input_file))
+					#print("Parameters")
+					#print("----------")
+					#print("  nx={} ny={} dx={} dy={}".format(field.shape[0], field.shape[1],
+					#							dx, dy))
+					#print("  time steps={}  image interval={}".format(timesteps,
+					#										image_interval))
 
-			# Plot/save initial field
-			write_field(field, 0)
-			# Iterate
-			t0 = time.time()
-			iterate(field, field0, a, dx, dy, timesteps, image_interval)
-			t1 = time.time()
-			# Plot/save final field
-			write_field(field, timesteps)
+					# Plot/save initial field
+					write_field(field, 0)
+					# Iterate
+					t0 = time.time()
+					iterate(field, field0, a, dx, dy, timesteps, image_interval)
+					t1 = time.time()
+					# Plot/save final field
+					write_field(field, timesteps)
 
-			print("Simulation finished in {0} s".format(t1-t0))
-		if version == 'cyt':    	
-		# Initialise the temperature field
-			field, field0 = init_fields_cyt(input_file)
+					newList.append([version, input_file, timesteps, "{0}".format(t1-t0)])
 
-			print("Heat equation solver")
-			print("Diffusion constant: {}".format(a))
-			print("Input file: {}".format(input_file))
-			print("Parameters")
-			print("----------")
-			print("  nx={} ny={} dx={} dy={}".format(field.shape[0], field.shape[1],
-											dx, dy))
-			print("  time steps={}  image interval={}".format(timesteps,
-														image_interval))
+					#print("Simulation finished in {0} s".format(t1-t0))
+	
+				if version == 'Cython':    	
+				# Initialise the temperature field
+					field, field0 = init_fields_cyt(input_file)
 
-			# Plot/save initial field
-			write_field_cyt(field, 0)
-			# Iterate
-			t0 = time.time()
-			iterate_cyt(field, field0, a, dx, dy, timesteps, image_interval)
-			t1 = time.time()
-			# Plot/save final field
-			write_field_cyt(field, timesteps)
+					#print("Heat equation solver")
+					#print("Diffusion constant: {}".format(a))
+					#print("Input file: {}".format(input_file))
+					#print("Parameters")
+					#print("----------")
+					#print("  nx={} ny={} dx={} dy={}".format(field.shape[0], field.shape[1],
+					#								dx, dy))
+					#print("  time steps={}  image interval={}".format(timesteps,
+					#											image_interval))
 
-			print("Simulation finished in {0} s".format(t1-t0))
+					# Plot/save initial field
+					write_field_cyt(field, 0)
+					# Iterate
+					t0 = time.time()
+					iterate_cyt(field, field0, a, dx, dy, timesteps, image_interval)
+					t1 = time.time()
+					# Plot/save final field
+					write_field_cyt(field, timesteps)
+					
+					newList.append([version, input_file, timesteps, "{0}".format(t1-t0)])
+
+					#print("Simulation finished in {0} s".format(t1-t0))
+	#print(newList)
+	
+	with open('results.csv', 'w', encoding='UTF8', newline='') as f:
+		writer = csv.writer(f)
+
+		# write the header
+		writer.writerow(headResults)
+
+		# write multiple rows
+		writer.writerows(newList)
 
 if __name__ == '__main__':
 
