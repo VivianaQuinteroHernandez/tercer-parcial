@@ -10,11 +10,11 @@ from heat_cyt import init_fields_cyt, write_field_cyt, iterate_cyt
 
 def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1, 
          timesteps=200, image_interval=4000):
-	#versions = ['Python','Cython']
+
 	input_files = ['bottle.dat', 'bottle_medium.dat', 'bottle_large.dat']
-	#timestepsS = [100, 200, 500, 1000, 2000]
+	timestepsS = [100, 200, 500, 1000, 2000, 3000]
 	versions = ['Python','Cython']
-	timestepsS = [100]
+
 	# field names 
 	headResults = ['version', 'input_file', 'timesteps', 'time (s)'] 
 	newList = []
