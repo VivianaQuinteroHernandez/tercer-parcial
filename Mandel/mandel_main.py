@@ -12,7 +12,7 @@ def plot_mandel(mandel):
     plt.axis('off')
     plt.show()
 
-def main(version='py'):
+def main(version='cyt'):
     kwargs = dict(cr=0.285, ci=0.01,
                   N=200,
                   bound=1.5)
