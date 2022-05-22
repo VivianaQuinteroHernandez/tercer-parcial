@@ -21,10 +21,10 @@ def main(version='Python', NN=100):
 
     # choose pure Python or Cython version
     if version == 'Python':
-        print("Using pure Python")
+        #print("Using pure Python")
         mandel_func = compute_mandel_py
     elif version == 'Cython': 
-        print("Using Cython")
+        #print("Using Cython")
         try:
             mandel_func = compute_mandel_cyt
         except NameError as ex:
