@@ -77,7 +77,7 @@ def main(input_file='bottle.dat', a=0.5, dx=0.1, dy=0.1,
 					#print("Simulation finished in {0} s".format(t1-t0))
 	#print(newList)
 	
-	with open('results.csv', 'w', encoding='UTF8', newline='') as f:
+	with open('results-A.csv', 'w', encoding='UTF8', newline='') as f:
 		writer = csv.writer(f)
 
 		# write the header

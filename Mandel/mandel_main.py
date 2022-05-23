@@ -40,7 +40,7 @@ if __name__ == '__main__':
     #    mandel_set, runtime = main('cyt')
     #else:
     #    mandel_set, runtime = main()
-    Ns = [100, 200, 500, 1000, 2000, 3000]
+    Ns = [100, 200, 300, 500, 700, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000]
     versions = ['Python','Cython']
 
 	# field names 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
             #print('Mandelbrot set generated in {0:5.2f} seconds'.format(runtime))
             #plot_mandel(mandel_set)
 
-    with open('results.csv', 'w', encoding='UTF8', newline='') as f:
+    with open('results-A.csv', 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f)
 
 		# write the header
